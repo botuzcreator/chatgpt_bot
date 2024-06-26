@@ -46,10 +46,10 @@ async def start(message: types.Message, state: FSMContext):
     username = message.from_user.username
     result = await DataBase.is_user(user_id)
 
-    button = [[KeyboardButton(text="💭Chatting — ChatGPT")],
-              [KeyboardButton(text="🌄Image generation — DALL·E")],
-              [KeyboardButton(text="🌅Image generation — Stable Diffusion")],
-              [KeyboardButton(text="👤My account | 💰Buy")]]
+    button = [[KeyboardButton(text="💭Suhbat — ChatGPT")],
+              [KeyboardButton(text="🌄Rasm yaratish — DALL·E")],
+              [KeyboardButton(text="🌅Rasm yaratish — Stable Diffusion")],
+              [KeyboardButton(text="👤Menning hisobim | 💰To'ldirish")]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard = button, resize_keyboard=True
     )
@@ -57,7 +57,7 @@ async def start(message: types.Message, state: FSMContext):
     if not result:
         await DataBase.insert_user(user_id, username)
         await message.answer(
-            text = "👋You have: \n💭3000 ChatGPT tokens \n🌄3 DALL·E Image Generations \n🌅3 Stable Diffusion Image generations\n Choose an option: 👇 \n If buttons don't work, enter /start command",
+            text = "👋Sizda bor: \n💭3000 ChatGPT token \n🌄3 DALL·E rasm generatsiyasi \n🌅3 Stable Diffusion rasm generatsiyasi\n Tanlang va ishlating: 👇 \n Agar muammo bo'lsa, /start buyrug'ini kiriting",
             reply_markup=reply_markup,
         )
     else:
