@@ -36,11 +36,11 @@ dp = Dispatcher()
 
 # Starts a conversation
 @dp.message(Command('start'))
-@dp.message(States.ENTRY_STATE, F.text.regexp(r'^🔙Back$'))
-@dp.message(States.CHATGPT_STATE, F.text.regexp(r'^🔙Back$'))
-@dp.message(States.DALL_E_STATE, F.text.regexp(r'^🔙Back$'))
-@dp.message(States.STABLE_STATE, F.text.regexp(r'^🔙Back$'))
-@dp.message(States.INFO_STATE, F.text.regexp(r'^🔙Back$'))
+@dp.message(States.ENTRY_STATE, F.text.regexp(r'^🔙Ortga$'))
+@dp.message(States.CHATGPT_STATE, F.text.regexp(r'^🔙Ortga$'))
+@dp.message(States.DALL_E_STATE, F.text.regexp(r'^🔙Ortga$'))
+@dp.message(States.STABLE_STATE, F.text.regexp(r'^🔙Ortga$'))
+@dp.message(States.INFO_STATE, F.text.regexp(r'^🔙Ortga$'))
 async def start(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     username = message.from_user.username
@@ -49,7 +49,7 @@ async def start(message: types.Message, state: FSMContext):
     button = [[KeyboardButton(text="💭Suhbat — ChatGPT")],
               [KeyboardButton(text="🌄Rasm yaratish — DALL·E")],
               [KeyboardButton(text="🌅Rasm yaratish — Stable Diffusion")],
-              [KeyboardButton(text="👤Menning hisobim | 💰To'ldirish")]]
+              [KeyboardButton(text="👤Menning hisobim | 💰To\'ldirish")]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard = button, resize_keyboard=True
     )
@@ -209,7 +209,7 @@ async def stable_answer_handler(message: types, state: FSMContext):
 
 
 # Displays information about user
-@dp.message(States.ENTRY_STATE, F.text.regexp(r'^👤Menning hisobim | 💰To'ldirish$'))
+@dp.message(States.ENTRY_STATE, F.text.regexp(r'^👤Menning hisobim | 💰To\'ldirish$'))
 @dp.message(States.PURCHASE_STATE, F.text.regexp(r'^🔙Ortga$'))
 async def display_info(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
