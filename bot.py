@@ -62,13 +62,13 @@ async def start(message: types.Message, state: FSMContext):
         )
     else:
         await message.answer(
-            text = "Choose an option: 👇🏻 \n If buttons don't work, enter /start command",
+            text = "Menudan foydalaning: 👇🏻 \n Agar tugmalar ishlamasa,  /start buyrug'ini kiriting",
             reply_markup=reply_markup,
         )
     await state.set_state(States.ENTRY_STATE)
 
 # Question Handling
-@dp.message(States.ENTRY_STATE, F.text.regexp(r'^💭Chatting — ChatGPT$'))
+@dp.message(States.ENTRY_STATE, F.text.regexp(r'^💭Suhbat — ChatGPT$'))
 @dp.message(States.ENTRY_STATE, F.text.regexp(r'^🌄Image generation — DALL·E$'))
 @dp.message(States.ENTRY_STATE, F.text.regexp(r'^🌅Image generation — Stable Diffusion$'))
 async def question_handler(message: types.Message, state: FSMContext):
@@ -77,11 +77,11 @@ async def question_handler(message: types.Message, state: FSMContext):
         keyboard = button, resize_keyboard=True
     )
     await message.answer(
-        text = "Enter your text: 👇🏻",
+        text = "Qani boshladik: 👇🏻",
         reply_markup=reply_markup,
     )
     option = message.text
-    if option == "💭Chatting — ChatGPT":
+    if option == "💭Suhbat — ChatGPT":
         await state.set_state(States.CHATGPT_STATE)
     elif option == "🌄Image generation — DALL·E":
         await state.set_state(States.DALL_E_STATE)
