@@ -57,7 +57,7 @@ async def start(message: types.Message, state: FSMContext):
     if not result:
         await DataBase.insert_user(user_id, username)
         await message.answer(
-            text = "👋Sizda bor: \n💭3000 ChatGPT token \n🌄3 DALL·E rasm generatsiyasi \n🌅3 Stable Diffusion rasm generatsiyasi\n Tanlang va ishlating: 👇 \n Agar muammo bo'lsa, /start buyrug'ini kiriting",
+            text = "👋Sizga sovg'a: \n💭3000 ChatGPT token \n🌄3 DALL·E rasm generatsiyasi \n🌅3 Stable Diffusion rasm generatsiyasi\n Tanlang va ishlating: 👇 \n Agar muammo bo'lsa, /start buyrug'ini kiriting",
             reply_markup=reply_markup,
         )
     else:
@@ -69,10 +69,10 @@ async def start(message: types.Message, state: FSMContext):
 
 # Question Handling
 @dp.message(States.ENTRY_STATE, F.text.regexp(r'^💭Suhbat — ChatGPT$'))
-@dp.message(States.ENTRY_STATE, F.text.regexp(r'^🌄Image generation — DALL·E$'))
-@dp.message(States.ENTRY_STATE, F.text.regexp(r'^🌅Image generation — Stable Diffusion$'))
+@dp.message(States.ENTRY_STATE, F.text.regexp(r'^🌄Rasm yaratish — DALL·E$'))
+@dp.message(States.ENTRY_STATE, F.text.regexp(r'^🌅Rasm yaratish — Stable Diffusion$'))
 async def question_handler(message: types.Message, state: FSMContext):
-    button = [[KeyboardButton(text="🔙Back")]]
+    button = [[KeyboardButton(text="🔙Ortga")]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard = button, resize_keyboard=True
     )
@@ -83,15 +83,15 @@ async def question_handler(message: types.Message, state: FSMContext):
     option = message.text
     if option == "💭Suhbat — ChatGPT":
         await state.set_state(States.CHATGPT_STATE)
-    elif option == "🌄Image generation — DALL·E":
+    elif option == "🌄Rasm yaratish — DALL·E":
         await state.set_state(States.DALL_E_STATE)
-    elif option == "🌅Image generation — Stable Diffusion":
+    elif option == "🌅Rasm yaratish — Stable Diffusion":
         await state.set_state(States.STABLE_STATE)
 
 # Answer Handling
 @dp.message(States.CHATGPT_STATE, F.text)
 async def chatgpt_answer_handler(message: types.Message, state: FSMContext):
-    button = [[KeyboardButton(text="🔙Back")]]
+    button = [[KeyboardButton(text="🔙Ortga")]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard = button, resize_keyboard=True
     )
@@ -131,7 +131,7 @@ async def chatgpt_answer_handler(message: types.Message, state: FSMContext):
 # Answer Handling
 @dp.message(States.DALL_E_STATE, F.text)
 async def dall_e_answer_handler(message: types.Message, state: FSMContext):
-    button = [[KeyboardButton(text="🔙Back")]]
+    button = [[KeyboardButton(text="🔙Ortga")]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard = button, resize_keyboard=True
     )
@@ -170,7 +170,7 @@ async def dall_e_answer_handler(message: types.Message, state: FSMContext):
 # Answer Handling
 @dp.message(States.STABLE_STATE, F.text)
 async def stable_answer_handler(message: types, state: FSMContext):
-    button = [[KeyboardButton(text="🔙Back")]]
+    button = [[KeyboardButton(text="🔙Ortga")]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard = button, resize_keyboard=True
     )
@@ -209,47 +209,47 @@ async def stable_answer_handler(message: types, state: FSMContext):
 
 
 # Displays information about user
-@dp.message(States.ENTRY_STATE, F.text.regexp(r'^👤My account | 💰Buy$'))
-@dp.message(States.PURCHASE_STATE, F.text.regexp(r'^🔙Back$'))
+@dp.message(States.ENTRY_STATE, F.text.regexp(r'^👤Menning hisobim | 💰To'ldirish$'))
+@dp.message(States.PURCHASE_STATE, F.text.regexp(r'^🔙Ortga$'))
 async def display_info(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     result = await DataBase.get_userinfo(user_id)
 
-    button = [[KeyboardButton(text="💰Buy tokens and generations")], [KeyboardButton(text="🔙Back")]]
+    button = [[KeyboardButton(text="💰Token va generatsiya sotib olish")], [KeyboardButton(text="🔙Ortga")]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard = button, resize_keyboard=True
     )
     await message.answer(
-        text = f"You have: \n 💭{result[2]} ChatGPT tokens \n 🌄{result[3]} DALL·E image generations \n 🌅{result[4]} Stable Diffusion image generations \n 💸 You can buy more with crypto",
+        text = f"Sizda hozirda bor: \n 💭{result[2]} ChatGPT tokenlar \n 🌄{result[3]} DALL·E rasm generatsiyalari \n 🌅{result[4]} Stable Diffusion rasm generatsiyalari \n 💸 Siz yana sotib olishingiz mumkin",
         reply_markup=reply_markup,
     )
     await state.set_state(States.INFO_STATE)
 
 
 # Displays goods
-@dp.message(States.INFO_STATE, F.text.regexp(r'^💰Buy tokens and generations$'))
-@dp.message(States.PURCHASE_CHATGPT_STATE, F.text.regexp(r'^🔙Back$'))
-@dp.message(States.PURCHASE_DALL_E_STATE, F.text.regexp(r'^🔙Back$'))
-@dp.message(States.PURCHASE_STABLE_STATE, F.text.regexp(r'^🔙Back$'))
+@dp.message(States.INFO_STATE, F.text.regexp(r'^💰Token va generatsiya sotib olish$'))
+@dp.message(States.PURCHASE_CHATGPT_STATE, F.text.regexp(r'^🔙Ortga$'))
+@dp.message(States.PURCHASE_DALL_E_STATE, F.text.regexp(r'^🔙Ortga$'))
+@dp.message(States.PURCHASE_STABLE_STATE, F.text.regexp(r'^🔙Ortga$'))
 async def purchase(message: types.Message, state: FSMContext):
-    button = [[KeyboardButton(text="100K ChatGPT tokens - 5 USD💵")],
-              [KeyboardButton(text="100 DALL·E image generations - 5 USD💵")],
-              [KeyboardButton(text="100 Stable Diffusion image generations - 5 USD💵")],
-              [KeyboardButton(text="🔙Back")]]
+    button = [[KeyboardButton(text="100K ChatGPT tokenlari - 5 USD💵")],
+              [KeyboardButton(text="100 DALL·E rasm generatsiyalari - 5 USD💵")],
+              [KeyboardButton(text="100 Stable Diffusion rasm generatsiyalari - 5 USD💵")],
+              [KeyboardButton(text="🔙Ortga")]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard = button, resize_keyboard=True
     )
     await message.answer(
-        text = "Choose product: 👇",
+        text = "Nima sotib olmoqchisiz: 👇",
         reply_markup=reply_markup,
     )
     await state.set_state(States.PURCHASE_STATE)
 
 
 # Displays cryptocurrencies
-@dp.message(States.PURCHASE_STATE, F.text.regexp(r'^100K ChatGPT tokens - 5 USD💵$'))
-@dp.message(States.PURCHASE_STATE, F.text.regexp(r'^100 DALL·E image generations - 5 USD💵$'))
-@dp.message(States.PURCHASE_STATE, F.text.regexp(r'^100 Stable Diffusion image generations - 5 USD💵$'))
+@dp.message(States.PURCHASE_STATE, F.text.regexp(r'^100K ChatGPT tokenlari - 5 USD💵$'))
+@dp.message(States.PURCHASE_STATE, F.text.regexp(r'^100 DALL·E rasm generatsiyalari - 5 USD💵$'))
+@dp.message(States.PURCHASE_STATE, F.text.regexp(r'^100 Stable Diffusion rasm generatsiyalari - 5 USD💵$'))
 async def currencies(message: types.Message, state: FSMContext):
     buttons = [
         [KeyboardButton(text="💲USDT"),
@@ -263,15 +263,15 @@ async def currencies(message: types.Message, state: FSMContext):
         resize_keyboard=True
     )
     await message.answer(
-        text = "Choose currency: 👇",
+        text = "Valyutani tanlang: 👇",
         reply_markup=keyboard,
     )
     product = message.text
-    if product == "100K ChatGPT tokens - 5 USD💵":
+    if product == "100K ChatGPT tokenlari - 5 USD💵":
         await state.set_state(States.PURCHASE_CHATGPT_STATE)
-    elif product == "100 DALL·E image generations - 5 USD💵":
+    elif product == "100 DALL·E rasm generatsiyalari - 5 USD💵":
         await state.set_state(States.PURCHASE_DALL_E_STATE)
-    elif product == "100 Stable Diffusion image generations - 5 USD💵":
+    elif product == "100 Stable Diffusion rasm generatsiyalari - 5 USD💵":
         await state.set_state(States.PURCHASE_STABLE_STATE)
 
 # Makes invoice and displays it
@@ -294,22 +294,22 @@ async def buy(message: types.Message, state: FSMContext):
     current_state = await state.get_state()
     product = ''
     if current_state == States.PURCHASE_CHATGPT_STATE:
-        product = '100K ChatGPT tokens - 5 USD💵'
+        product = '100K ChatGPT tokenlari - 5 USD💵'
         await DataBase.new_order(invoice_id, user_id, 'chatgpt')
     elif current_state == States.PURCHASE_DALL_E_STATE:
-        product = '100 DALL·E image generations - 5 USD💵'
+        product = '100 DALL·E rasm generatsiyalari - 5 USD💵'
         await DataBase.new_order(invoice_id, user_id, 'dall_e')
     elif current_state == States.PURCHASE_STABLE_STATE:
-        product = '100 Stable Diffusion image generations - 5 USD💵'
+        product = '100 Stable Diffusion rasm generatsiyalari - 5 USD💵'
         await DataBase.new_order(invoice_id, user_id, 'stable')
     keyboard = InlineKeyboardMarkup(
         inline_keyboard = [
-            [InlineKeyboardButton(text="💰Buy", url=invoice_url),
-             InlineKeyboardButton(text="☑️Check", callback_data=str(invoice_id))],
+            [InlineKeyboardButton(text="💰Sotib olish", url=invoice_url),
+             InlineKeyboardButton(text="☑️Tekshirish", callback_data=str(invoice_id))],
         ]
     )
     await message.answer(
-        text = f"🪙Product: {product} \n 💳If you want to pay click the button 'Buy', click button 'Start' in Crypto Bot and follow the instructions \n ❗Consider the network commission \n ☑️After payment you should tap 'Check' button to check payment \n If you don't want to pay tap the 'Back' button: 👇",
+        text = f"🪙Harid qilmoqchisiz: {product} \n 💳Agar to'lamoqchi bo'lsangiz 'Sotib olish' tugmasini bosing, Crypto Botda 'Start' tugmasini bosing va ko'rsatmalarga amal qilgan holda to'lovni amalga oshiring \n ❗ Tarmoq komissiyasini ham hisobga oling \n ☑️To'lovni amalga oshirgandan so'ng 'Tekshirish' tugmasini bosing \n Agar hozir sotib olishni istamasangiz 'Ortga' tugmasini bosing: 👇",
         reply_markup=keyboard,
     )
 
@@ -322,21 +322,21 @@ async def keyboard_callback(callback_query: types.CallbackQuery):
     if result:
         status = await CryptoPay.get_status(invoice_id)
         if status == "active":
-            await query.answer("⌚️We have not received your payment yet")
+            await query.answer("⌚️Biz sizning to'lovingizni qabul qilmadik hozircha, iltimos kutib turing!")
         elif status == "paid":
             if result[1] == 'chatgpt':
                 await DataBase.update_chatgpt(result[0], invoice_id)
-                await query.answer("✅Successful payment, tokens were added to your account")
+                await query.answer("✅To'lov amalga oshdi, tokenlar sizning hisobingizga qo'shildi")
             elif result[1] == 'dall_e':
                 await DataBase.update_dalle(result[0], invoice_id)
-                await query.answer("✅Successful payment, image generations were added to your account")
+                await query.answer("✅To'lov amalga oshdi, Dall-E rasm generatsiyalari sizning hisobingizga qo'shildi")
             elif result[1] == 'stable':
                 await DataBase.update_stable(result[0], invoice_id)
-                await query.answer("✅Successful payment, image generations were added to your account")
+                await query.answer("✅To'lov amalga oshdi, Stable Diffusion rasm generatsiyalari sizning hisobingizga qo'shildi")
         elif status == "expired":
-            await query.answer("❎Payment has expired, create a new payment")
+            await query.answer("❎To'lov cheki amal qilish muddati tugadi, iltimos yangi to'lov yarating")
     else:
-        await query.answer("✅You have already received your purchase")
+        await query.answer("✅Siz haridingizni qabul qilib olgansiz allaqachon!")
 
 async def main():
     await DataBase.open_pool()
