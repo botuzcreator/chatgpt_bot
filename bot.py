@@ -256,7 +256,7 @@ async def currencies(message: types.Message, state: FSMContext):
         KeyboardButton(text="💲TON")],
         [KeyboardButton(text="💲BTC"),
         KeyboardButton(text="💲ETH")],
-        [KeyboardButton(text="🔙Back")]
+        [KeyboardButton(text="🔙Ortga")]
     ]
     keyboard = ReplyKeyboardMarkup(
         keyboard = buttons,
@@ -322,7 +322,7 @@ async def keyboard_callback(callback_query: types.CallbackQuery):
     if result:
         status = await CryptoPay.get_status(invoice_id)
         if status == "active":
-            await query.answer("⌚️Biz sizning to'lovingizni qabul qilmadik hozircha, iltimos kutib turing!")
+            await query.answer("⌚️Iltimos kutib turing!")
         elif status == "paid":
             if result[1] == 'chatgpt':
                 await DataBase.update_chatgpt(result[0], invoice_id)
