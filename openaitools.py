@@ -20,7 +20,7 @@ class OpenAiTools:
                         "content": prompt,
                     }
                 ],
-                model="gpt-3.5-turbo",
+                model="gpt-4-turbo",
                 max_tokens=3000,
                 temperature=1,
             )
